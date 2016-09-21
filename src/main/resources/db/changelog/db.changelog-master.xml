@@ -1,0 +1,84 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+	<!-- <changeSet author="karthy (generated)" id="1"
+		objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+		<createTable tableName="SmartPhone">
+			<column autoIncrement="true" name="product_ID" type="INT">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="productType_ID" type="VARCHAR(20)">
+				<constraints nullable="false" />
+			</column>
+			<column name="shortDescription" type="VARCHAR(200)">
+				<constraints nullable="false" />
+			</column>
+			<column name="model" type="VARCHAR(50)">
+				<constraints nullable="false" />
+			</column>
+			<column name="brand" type="VARCHAR(30)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="size" type="VARCHAR(30)">
+				<constraints nullable="false" />
+			</column>
+
+
+			<column name="displaySize" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="color" type="VARCHAR(30)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="weight" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="carrierType" type="VARCHAR(10)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="networkCapability" type="VARCHAR(10)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="batteryPower" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="operatingSystem" type="VARCHAR(100)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="processor" type="VARCHAR">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="internalMemory" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="ram" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="frontCamera" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="rearCamera" type="INTEGER">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="price" type="FLOAT">
+				<constraints nullable="false" />
+			</column>
+
+		</createTable>
+	</changeSet>
+ --></databaseChangeLog>
