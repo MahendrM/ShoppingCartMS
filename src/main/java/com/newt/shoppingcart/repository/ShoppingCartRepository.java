@@ -1,0 +1,15 @@
+package com.newt.shoppingcart.repository;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+
+import com.newt.shoppingcart.model.ShoppingCart;
+import com.newt.shoppingcart.model.SmartPhone;
+@Repository
+public interface ShoppingCartRepository extends CrudRepository<ShoppingCart, String>{
+
+	 public ShoppingCart findByShoppingCartId(int brand);
+	 /*public SmartPhone findByProductId(int productId);
+	 public long count();*/
+}

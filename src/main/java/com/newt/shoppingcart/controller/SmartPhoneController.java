@@ -1,12 +1,16 @@
 package com.newt.shoppingcart.controller;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.newt.shoppingcart.commonutils.NotificationService;
 import com.newt.shoppingcart.model.SmartPhone;
 import com.newt.shoppingcart.repository.SmartPhoneRepository;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -15,16 +19,18 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RequestMapping("/shoppingcart")
 public class SmartPhoneController {
 	private final SmartPhoneRepository smartphoneRepo;
-
+	
 	@Autowired
 	public SmartPhoneController(SmartPhoneRepository smartphoneRepo) {
 		this.smartphoneRepo = smartphoneRepo;
 	}
 
 	/*Method used to Add the phone details and return productid*/
+	
 	@ApiOperation(value = "Register Smart Phone")
 	@RequestMapping(method = RequestMethod.POST)
 	public SmartPhone addSmartPhone(@RequestBody SmartPhone addphone) {
+
 		
 		return smartphoneRepo.save(addphone);
 	}
@@ -82,6 +88,7 @@ public class SmartPhoneController {
 	@RequestMapping(method = RequestMethod.GET)
 	@ApiOperation(value = "List All Phones in Smart Phone Table")
 	public Iterable listPhones() {
+		
 		return smartphoneRepo.findAll();
 	}
 
@@ -100,6 +107,4 @@ public class SmartPhoneController {
 
 		return "Deleted Successfully";
 	}
-	
-	
 }
