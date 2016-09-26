@@ -1,13 +1,15 @@
 package com.newt.shoppingcart.controller;
 
-
-
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,6 @@ import com.newt.shoppingcart.model.Orders;
 import com.newt.shoppingcart.model.OrdersItems;
 import com.newt.shoppingcart.model.ShoppingCart;
 import com.newt.shoppingcart.model.ShoppingCartItems;
-import com.newt.shoppingcart.model.SmartPhone;
 import com.newt.shoppingcart.repository.OrderItemsRepository;
 import com.newt.shoppingcart.repository.OrderRepository;
 import com.newt.shoppingcart.repository.ShoppingCartItemsRepository;
@@ -39,9 +40,11 @@ public class OrderServiceController {
 	ShoppingCartRepository shoppingcartRepo;
 	@Autowired
 	ShoppingCartItemsRepository shoppingcartItemsRepo;
-
+	
 	@Autowired
 	private NotificationService emailNotification;
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
 	Orders order = new Orders();
 	OrdersItems orderItems = new OrdersItems();
@@ -50,23 +53,24 @@ public class OrderServiceController {
 	
 	@RequestMapping(value = "create/{shoppingCartID}", method = RequestMethod.PUT,produces = "application/json")
 	@ApiOperation(value = "Create Order")
-	public String createOrder(@RequestBody int shoppingCartID) {
+	public String createOrder(@RequestBody int shoppingCartID,BindingResult result) {
 			
 		boolean statusMessage = false;
 		
 		ShoppingCart shopcartDtls;
 		ShoppingCartItems shopcartItmsDtls;
-		
-		try {
+		if( ! result.hasErrors() ){
+ 
+			try {
 		
 			shopcartDtls = shoppingcartRepo.findByShoppingCartId(shoppingCartID);
 			
 			shopcartItmsDtls = shoppingcartItemsRepo.findByShoppingCartId(shoppingCartID);
 			
 			if (shopcartDtls != null) {
-				
-				System.out.println("Shop Cart Dtls--->"+shopcartDtls.toString());
-				//Move the value from Shopping cart to Order after that delete the value in Shopping Cart.
+				LOGGER.info("Shop Cart Dtls by ID--->"+shopcartDtls.toString());
+				//.Move the value from Shopping cart to Order after that delete the value in Shopping Cart
+				LOGGER.info("Move the value from Shopping cart to Order after that delete the value in Shopping Cart");
 				order.setCustomerId(shopcartDtls.getCustomerId());
 				order.setOrderType("PICKUP");
 				order.setOrderStatus("Pending");
@@ -84,10 +88,8 @@ public class OrderServiceController {
 						orderItems.setPrice(shopcartItmsDtls.getPrice());
 						orderItemsRepo.save(orderItems);
 				}
-			
-				System.out.println("Shop Cart Items Values--->"+shopcartItmsDtls.toString());
-				
-				System.out.println("ShopCart Values----->"+shopcartDtls.toString());
+			LOGGER.info("Shop Cart Items Values--->"+shopcartItmsDtls.toString());
+			LOGGER.info("ShopCart Values----->"+shopcartDtls.toString());
 				
 		shoppingcartItemsRepo.delete(shopcartItmsDtls);
 		shoppingcartRepo.delete(shopcartDtls);
@@ -95,15 +97,15 @@ public class OrderServiceController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return"Order Created Successfully!! ORDERID==>"+order.getOrderId();
+		
 	}
-	
+		return"Order Created Successfully!! ORDERID==>"+order.getOrderId(); 
+	} 
 	/************************Method to Cancel Order*************************/
 	
 	@RequestMapping(value = "cancel/{orderID}", method = RequestMethod.PUT,produces = "application/json")
 	@ApiOperation(value = "Cancel Order")
 	public Map<String,String> cancelOrder(@RequestBody int orderID) {	
-		
 		HashMap<String, String> statusmsg = new HashMap< String,String>();
 		try {
 			order=orderRepo.findByOrderId(orderID);
@@ -129,17 +131,14 @@ public class OrderServiceController {
 					statusmsg.put("Message", "Order Already Delivered");
 					emailNotification.sendNotification("ORDER STATUS","Your Order#"+orderID+"Could not be Cancelled It's Already"+Productstatus.DELIVERED.toString());
 				}
-				
 			}		
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return statusmsg;
 	}
-	
 	/************************Method to Get Price of the Order*************************/	
-
+	
 	@RequestMapping(value = "getPrice/{orderID}", method = RequestMethod.GET, produces = "application/json")
 	@ApiOperation(value = "Get Order Price")
 	public float getOrderPrice(@PathVariable int orderID) {
@@ -152,47 +151,8 @@ public class OrderServiceController {
 			return price;
 
 		}
-		System.out.println("GET PRICE VAULE--->" + price);
+		LOGGER.info("GET PRICE VAULE--->" + price);
 		return price;
 	}
 
-/*	@RequestMapping(value = "additem/{customerId}/{productTypeId}", method = RequestMethod.PUT, produces = "application/json")
-	@ApiOperation(value = "add Item")
-	public int addItem (@PathVariable int customerId,@PathVariable String productTypeId) {
-
-		ShoppingCart shopCart=shoppingcartRepo.findByCustomerId(customerId);
-		
-		if (shopCart != null) {
-
-			if (shopCart.getCustomerId() > 0) {			//IF Customer is Exist
-				
-				ShoppingCartItems shoppingCartIems = new ShoppingCartItems();	//Declare this Instance Globally
-				
-				shoppingCartIems.setShoppingCartId(shopCart.getShoppingCartId());	//Like this u can save other values in shoppingCartItems table...
-
-				shoppingcartItemsRepo.save(shoppingCartIems);
-				
-			}else
-			{
-			
-				
-				shopCart.setCustomerId(customerId);
-				shopCart.setStatus("PENDING");				
-				shoppingcartRepo.save(shopCart);
-				
-				//	Create new cart for customer
-				
-			}
-			
-			
-		}
-
-		return 0;
-			}*/
-
-	
-	
-	
-	
-	
 }
