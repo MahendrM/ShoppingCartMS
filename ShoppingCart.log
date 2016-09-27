@@ -1,0 +1,23 @@
+2016-09-26 18:50:30.197  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 18:55:30.200  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:00:30.202  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:05:30.204  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:10:30.205  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:15:30.206  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:20:30.208  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:25:30.210  INFO 3536 --- [AsyncResolver-bootstrap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+2016-09-26 19:26:44.297  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] inMXBeanRegistrar$SpringApplicationAdmin : Application shutdown requested.
+2016-09-26 19:26:44.298  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] ationConfigEmbeddedWebApplicationContext : Closing org.springframework.boot.context.embedded.AnnotationConfigEmbeddedWebApplicationContext@6dd93a21: startup date [Mon Sep 26 17:44:45 IST 2016]; parent: org.springframework.context.annotation.AnnotationConfigApplicationContext@2c177f9e
+2016-09-26 19:26:44.307  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] c.n.e.EurekaDiscoveryClientConfiguration : Unregistering application ShoppingCart with eureka with status DOWN
+2016-09-26 19:26:44.307  WARN 3536 --- [RMI TCP Connection(2)-172.26.0.157] com.netflix.discovery.DiscoveryClient    : Saw local status change event StatusChangeEvent [timestamp=1474898204307, current=DOWN, previous=UP]
+2016-09-26 19:26:44.308  INFO 3536 --- [DiscoveryClient-InstanceInfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SHOPPINGCART/Newt-Rnt22.newtglobal.chn.local:ShoppingCart:8763: registering service...
+2016-09-26 19:26:44.311  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] com.netflix.discovery.DiscoveryClient    : Shutting down DiscoveryClient ...
+2016-09-26 19:26:44.312  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] com.netflix.discovery.DiscoveryClient    : Unregistering ...
+2016-09-26 19:26:44.908  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SHOPPINGCART/Newt-Rnt22.newtglobal.chn.local:ShoppingCart:8763 - deregister  status: 200
+2016-09-26 19:26:44.913  INFO 3536 --- [DiscoveryClient-InstanceInfoReplicator-0] com.netflix.discovery.DiscoveryClient    : DiscoveryClient_SHOPPINGCART/Newt-Rnt22.newtglobal.chn.local:ShoppingCart:8763 - registration status: 204
+2016-09-26 19:26:44.952  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] com.netflix.discovery.DiscoveryClient    : Completed shut down of DiscoveryClient
+2016-09-26 19:26:44.969  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 2147483647
+2016-09-26 19:26:44.971  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 0
+2016-09-26 19:26:44.981  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown
+2016-09-26 19:26:44.981  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans
+2016-09-26 19:26:44.993  INFO 3536 --- [RMI TCP Connection(2)-172.26.0.157] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
