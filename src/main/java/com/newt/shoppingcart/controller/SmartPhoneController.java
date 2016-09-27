@@ -2,6 +2,8 @@ package com.newt.shoppingcart.controller;
 
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +21,8 @@ import com.wordnik.swagger.annotations.ApiOperation;
 @RequestMapping("/shoppingcart")
 public class SmartPhoneController {
 	private final SmartPhoneRepository smartphoneRepo;
-	
+	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	public SmartPhoneController(SmartPhoneRepository smartphoneRepo) {
 		this.smartphoneRepo = smartphoneRepo;
@@ -30,7 +33,6 @@ public class SmartPhoneController {
 	@ApiOperation(value = "Register Smart Phone")
 	@RequestMapping(method = RequestMethod.POST)
 	public SmartPhone addSmartPhone(@RequestBody SmartPhone addphone) {
-
 		
 		return smartphoneRepo.save(addphone);
 	}
@@ -70,6 +72,7 @@ public class SmartPhoneController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.error("SmartPhoneController--->updateSmartPhone():",e);
 		}
 		return"Updated Successfully STATUS="+statusMessage;
 	}
@@ -103,6 +106,7 @@ public class SmartPhoneController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			LOGGER.error("SmartPhoneController--->deleteSmartPhone():",e);
 		}
 
 		return "Deleted Successfully";
