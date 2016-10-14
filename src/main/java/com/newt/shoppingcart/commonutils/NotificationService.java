@@ -19,8 +19,8 @@ public class NotificationService {
 	public void sendNotification(String Subject,String Message) throws MailException
 	{
 		SimpleMailMessage mail = new SimpleMailMessage();
-		mail.setFrom("karthiraj@gamil.com");
-		mail.setTo("karthyrj5@gmail.com");
+		mail.setFrom("manogarig@newtglobal.com");
+		mail.setTo("manogarig@newtglobal.com");
 		mail.setSubject(Subject);
 		mail.setText(Message);
 		

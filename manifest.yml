@@ -1,8 +1,8 @@
 ---
 applications:
-- name: Car
+- name: ShoppingCart
   memory: 1024M
   buildpack: java_buildpack
-  path: target/Car-0.0.1-SNAPSHOT.jar
+  path: target/ShoppingCart-0.0.1-SNAPSHOT.jar
   host: car-microservice-8763
   domain: cfapps.io

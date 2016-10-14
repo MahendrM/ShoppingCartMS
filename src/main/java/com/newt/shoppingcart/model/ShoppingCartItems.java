@@ -1,66 +1,56 @@
 package com.newt.shoppingcart.model;
 
+import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.joda.time.DateTime;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "shoppingcartitems")
 public class ShoppingCartItems {
 
 	@Id
-	private int shoppingCartItemsId;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int shoppingcartitemsId;
 
-	private int shoppingCartId;
+	private int shoppingcartId;
 
-	private String productTypeId;
+	private String productName;
+	
+	private int customerId;
+	
+	private String status;
 
-	private String productId;
-
-	private int quantity;
+	private int productId;
 
 	private float price;
 
-	public int getShoppingCartItemsId() {
-		return shoppingCartItemsId;
+	private String productDesc;
+
+	public String getProductDesc() {
+		return productDesc;
 	}
 
-	public void setShoppingCartItemsId(int shoppingCartItemsId) {
-		this.shoppingCartItemsId = shoppingCartItemsId;
+	public void setProductDesc(String productDesc) {
+		this.productDesc = productDesc;
 	}
 
-	public int getShoppingCartId() {
-		return shoppingCartId;
+	public String getProductName() {
+		return productName;
 	}
 
-	public void setShoppingCartId(int shoppingCartId) {
-		this.shoppingCartId = shoppingCartId;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
-	public String getProductTypeId() {
-		return productTypeId;
-	}
-
-	public void setProductTypeId(String productTypeId) {
-		this.productTypeId = productTypeId;
-	}
-
-	public String getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 
-	public void setProductId(String productId) {
+	public void setProductId(int productId) {
 		this.productId = productId;
-	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
 	}
 
 	public float getPrice() {
@@ -71,12 +61,42 @@ public class ShoppingCartItems {
 		this.price = price;
 	}
 
-	@Override
-	public String toString() {
-		return "ShoppingCartItems [shoppingCartItemsId=" + shoppingCartItemsId + ", shoppingCartId=" + shoppingCartId
-				+ ", productTypeId=" + productTypeId + ", productId=" + productId + ", quantity=" + quantity
-				+ ", price=" + price + "]";
+	public int getShoppingcartId() {
+		return shoppingcartId;
 	}
 
-	
+	public int getCustomerId() {
+		return customerId;
+	}
+
+	public void setCustomerId(int customerId) {
+		this.customerId = customerId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public int getShoppingcartitemsId() {
+		return shoppingcartitemsId;
+	}
+
+	public void setShoppingcartitemsId(int shoppingcartitemsId) {
+		this.shoppingcartitemsId = shoppingcartitemsId;
+	}
+
+	@Override
+	public String toString() {
+		return "ShoppingCartItems [shoppingcartitemsId=" + shoppingcartitemsId + ", shoppingcartId=" + shoppingcartId
+				+ ", productName=" + productName + ", customerId=" + customerId + ", status=" + status + ", productId="
+				+ productId + ", price=" + price + ", productDesc=" + productDesc + "]";
+	}
+
+	public void setShoppingcartId(int shoppingcartId) {
+		this.shoppingcartId = shoppingcartId;
+	}
 }

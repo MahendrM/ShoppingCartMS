@@ -1,32 +1,30 @@
 package com.newt.shoppingcart.model;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 import org.joda.time.DateTime;
 
 @Entity
+@Table(name = "shoppingcart")
 public class ShoppingCart {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int shoppingCartId;
+	private int shoppingcartId;
 
 	private int customerId;
 
-	private DateTime createDate;
+	private Date createdDate;
 
 	private String status;
 
-	public int getShoppingCartId() {
-		return shoppingCartId;
-	}
-
-	public void setShoppingCartId(int shoppingCartId) {
-		this.shoppingCartId = shoppingCartId;
-	}
+	private int productId;
 
 	public int getCustomerId() {
 		return customerId;
@@ -44,18 +42,34 @@ public class ShoppingCart {
 		this.status = status;
 	}
 
-	public DateTime getCreateDate() {
-		return createDate;
+	public int getProductId() {
+		return productId;
 	}
 
-	public void setCreateDate(DateTime createDate) {
-		this.createDate = createDate;
+	public void setProductId(int productId) {
+		this.productId = productId;
+	}
+
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	public int getShoppingcartId() {
+		return shoppingcartId;
+	}
+	
+	public void setShoppingcartId(int shoppingcartId) {
+		this.shoppingcartId = shoppingcartId;
 	}
 
 	@Override
 	public String toString() {
-		return "ShoppingCart [shoppingCartId=" + shoppingCartId + ", customerId=" + customerId + ", createDate="
-				+ createDate + ", status=" + status + "]";
+		return "ShoppingCart [shoppingcartId=" + shoppingcartId + ", customerId=" + customerId + ", createdDate="
+				+ createdDate + ", status=" + status + ", productId=" + productId + "]";
 	}
 
 }

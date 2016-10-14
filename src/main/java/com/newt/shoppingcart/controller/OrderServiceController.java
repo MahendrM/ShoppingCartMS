@@ -1,9 +1,11 @@
 package com.newt.shoppingcart.controller;
-
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +35,6 @@ import com.wordnik.swagger.annotations.ApiOperation;
 public class OrderServiceController {
 	
 	@Autowired
-	OrderItemsRepository orderItemsRepo;
-	@Autowired
-	OrderRepository orderRepo;
-	@Autowired
 	ShoppingCartRepository shoppingcartRepo;
 	@Autowired
 	ShoppingCartItemsRepository shoppingcartItemsRepo;
@@ -46,113 +44,178 @@ public class OrderServiceController {
 	
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 	
-	Orders order = new Orders();
-	OrdersItems orderItems = new OrdersItems();
+	
 	Date date = new Date();
-	/*Method used to Create the Order*/
 	
-	@RequestMapping(value = "create/{shoppingCartID}", method = RequestMethod.PUT,produces = "application/json")
+	@RequestMapping(value = "create/{customerId}/{customerName}/{productId}/{productName}/{price}/{productdesc}", method = RequestMethod.POST,produces = "application/json")
 	@ApiOperation(value = "Create Order")
-	public String createOrder(@RequestBody int shoppingCartID,BindingResult result) {
+	public Map<String,String> createOrder(@PathVariable int customerId,@PathVariable String customerName,@PathVariable int productId,@PathVariable String productName,
+			@PathVariable float price,@PathVariable String productdesc) {
 			
-		boolean statusMessage = false;
-		
-		ShoppingCart shopcartDtls;
-		ShoppingCartItems shopcartItmsDtls;
-		if( ! result.hasErrors() ){
- 
+		HashMap<String, String> statusmsg = new HashMap<String,String>();
+		float totalcost = 0;
 			try {
+				ShoppingCart shopcartDtlsnew = new ShoppingCart();
+
+					shopcartDtlsnew.setCustomerId(customerId);
+					shopcartDtlsnew.setCreatedDate(new Date());
+					shopcartDtlsnew.setStatus("A");
+					shopcartDtlsnew.setProductId(productId);
+					shopcartDtlsnew=shoppingcartRepo.save(shopcartDtlsnew);
+					ShoppingCartItems shopcartItmsDtlsnew = new ShoppingCartItems();
+
+					shopcartItmsDtlsnew.setShoppingcartId(shopcartDtlsnew.getShoppingcartId());
+					shopcartItmsDtlsnew.setProductName(productName);
+					shopcartItmsDtlsnew.setProductId(productId);
+					shopcartItmsDtlsnew.setPrice(price);
+					shopcartItmsDtlsnew.setProductDesc(productdesc);
+					shopcartItmsDtlsnew.setCustomerId(customerId);
+					shopcartItmsDtlsnew.setStatus("A");
+					shopcartItmsDtlsnew=shoppingcartItemsRepo.save(shopcartItmsDtlsnew);
+			//		emailNotification.sendNotification("ORDER STATUS","Your Order#"+shopcartDtls.getShoppingCartId()+"has Created Successfully"+date.toString());
 		
-			shopcartDtls = shoppingcartRepo.findByShoppingCartId(shoppingCartID);
-			
-			shopcartItmsDtls = shoppingcartItemsRepo.findByShoppingCartId(shoppingCartID);
-			
-			if (shopcartDtls != null) {
-				LOGGER.info("Shop Cart Dtls by ID--->"+shopcartDtls.toString());
-				//.Move the value from Shopping cart to Order after that delete the value in Shopping Cart
-				LOGGER.info("Move the value from Shopping cart to Order after that delete the value in Shopping Cart");
-				order.setCustomerId(shopcartDtls.getCustomerId());
-				order.setOrderType("PICKUP");
-				order.setOrderStatus("Pending");
-				order.setCancelDate(null);
-				order.setOrderDate(new Date());
-				orderRepo.save(order);
+			//Already Ordered Items list
+					List<ShoppingCartItems>shopcartItmsDtlsList;
+					List<ShoppingCartItems>shopcartItemsresult = new ArrayList<ShoppingCartItems>();
+					shopcartItmsDtlsList= shoppingcartItemsRepo.findByCustomerId(customerId);					
+					if (shopcartItmsDtlsList != null) {
+						for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
+							if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
+								shopcartItemsresult.add(shoppingCartItems);
+								totalcost=totalcost+shoppingCartItems.getPrice();
+								
+							}
+						}				
+					}
+					//Already Ordered Items list
+					statusmsg.put("MESSAGE",""+totalcost);
+				
+		
+			} catch (Exception e) {
+				e.printStackTrace();
+				statusmsg.put("STATUS","FAILURE");
+				statusmsg.put("MESSAGE",e.toString());
 			}
-				if (shopcartItmsDtls != null) {
-			
-					//Move the value from Shopping cart Items to Order Items after that delete the value in Shopping Cart Items.
-						orderItems.setOrderId(order.getOrderId());
-						orderItems.setProductId(shopcartItmsDtls.getProductId());
-						orderItems.setProductTypeId(shopcartItmsDtls.getProductTypeId());						
-						orderItems.setQuantity(shopcartItmsDtls.getQuantity());
-						orderItems.setPrice(shopcartItmsDtls.getPrice());
-						orderItemsRepo.save(orderItems);
-				}
-			LOGGER.info("Shop Cart Items Values--->"+shopcartItmsDtls.toString());
-			LOGGER.info("ShopCart Values----->"+shopcartDtls.toString());
-				
-		shoppingcartItemsRepo.delete(shopcartItmsDtls);
-		shoppingcartRepo.delete(shopcartDtls);
-		emailNotification.sendNotification("ORDER STATUS","Thanks for placing your order. We are currently processing your order");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
 		
+		return statusmsg;
 	}
-		return"Order Created Successfully!! ORDERID==>"+order.getOrderId(); 
-	} 
-	/************************Method to Cancel Order*************************/
 	
-	@RequestMapping(value = "cancel/{orderID}", method = RequestMethod.PUT,produces = "application/json")
-	@ApiOperation(value = "Cancel Order")
-	public Map<String,String> cancelOrder(@RequestBody int orderID) {	
-		HashMap<String, String> statusmsg = new HashMap< String,String>();
+	@RequestMapping(value = "get/{shopcartItmId}", method = RequestMethod.GET,produces = "application/json")
+	@ApiOperation(value = "Get ShoppingCart Details")
+	public ShoppingCartItems getOrder(@PathVariable int shopcartItmId) {	
 		try {
-			order=orderRepo.findByOrderId(orderID);
-			if (order != null) {
+			ShoppingCartItems shopcartItmsDtls = new ShoppingCartItems();
+			
+			shopcartItmsDtls=shoppingcartItemsRepo.findByShoppingcartitemsId(shopcartItmId);
+			if (shopcartItmsDtls != null) {
 				
-				if(order.getOrderStatus().equalsIgnoreCase(Productstatus.PENDING.toString())||order.getOrderStatus().equalsIgnoreCase(Productstatus.PROCESSING.toString())||order.getOrderStatus().equalsIgnoreCase(Productstatus.CANCELLED.toString()))
-				{
-					order.setOrderStatus("Cancelled");
-					statusmsg.put("Status", "SUCCESS");
-					statusmsg.put("Message", "Your Order #"+order.getOrderId()+"Cancelled Successfully");
-					 
-					emailNotification.sendNotification("ORDER STATUS","Your Order#"+orderID+"has been Cancelled on"+date.toString());
-					orderRepo.save(order);					
-				}else if(order.getOrderStatus().equalsIgnoreCase(Productstatus.SHIPPED.toString()))
-				{					
-						statusmsg.put("Status", "Failure");
-						statusmsg.put("Message", "Order Already Shipped");
-						emailNotification.sendNotification("ORDER STATUS","Your Order#"+orderID+"Could not be Cancelled It's Already"+Productstatus.SHIPPED.toString());
-				}
-				else if(order.getOrderStatus().equalsIgnoreCase(Productstatus.DELIVERED.toString()))
-				{
-					statusmsg.put("Status", "Failure");
-					statusmsg.put("Message", "Order Already Delivered");
-					emailNotification.sendNotification("ORDER STATUS","Your Order#"+orderID+"Could not be Cancelled It's Already"+Productstatus.DELIVERED.toString());
-				}
+				return shopcartItmsDtls;
 			}		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+	
+	
+	@RequestMapping(value = "get/shoppingcart/{shopcartId}", method = RequestMethod.GET,produces = "application/json")
+	@ApiOperation(value = "Get ShoppingCart Details")
+	public ShoppingCart  getByShopcartId(@PathVariable int shopcartId) {	
+		try {
+			ShoppingCart shopcartDtls = new ShoppingCart();
+			shopcartDtls=shoppingcartRepo.findByShoppingcartId(shopcartId);
+			
+			if (shopcartDtls != null) {
+				
+				return shopcartDtls;
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	/*@RequestMapping(value = "get/productList/{customerId}", method = RequestMethod.GET,produces = "application/json")
+	@ApiOperation(value = "Get ShoppingCart Details")
+	public Object[] orderCheckout(@PathVariable int customerId) {	
+		try {
+			List<ShoppingCartItems>shopcartItmsDtlsList;
+			ArrayList<ShoppingCartItems>shopcartItemsresult = new ArrayList<ShoppingCartItems>();
+			shopcartItmsDtlsList= shoppingcartItemsRepo.findByCustomerId(customerId);
+			
+			if (shopcartItmsDtlsList != null) {
+				for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
+					if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
+						shopcartItemsresult.add(shoppingCartItems);
+					}
+				}		
+				Object[] shopcartitems = shopcartItemsresult.toArray();
+				return shopcartitems;
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}*/
+	
+/*Commented for testing purpose*/	
+	
+	@RequestMapping(value = "get/productList/{customerId}", method = RequestMethod.GET,produces = "application/json")
+	@ApiOperation(value = "Get ShoppingCart Details")
+	public List<ShoppingCartItems> orderCheckout(@PathVariable int customerId) {	
+		try {
+			List<ShoppingCartItems>shopcartItmsDtlsList;
+			List<ShoppingCartItems>shopcartItemsresult = new ArrayList<ShoppingCartItems>();
+			shopcartItmsDtlsList= shoppingcartItemsRepo.findByCustomerId(customerId);
+			
+			if (shopcartItmsDtlsList != null) {
+				for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
+					if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
+						shopcartItemsresult.add(shoppingCartItems);
+					}
+				}		
+				return shopcartItemsresult;
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "deleteOrder/{shopcartItemsID}/{customerId}/{productId}", method = RequestMethod.DELETE, produces = "application/json")
+	@ApiOperation(value = "Delete Order")
+	public Map<String,String>deleteOrder(@PathVariable int shopcartItemsID, @PathVariable int customerId,@PathVariable int productId) {
+		HashMap<String, String> statusmsg = new HashMap< String,String>();
+		try{
+			ShoppingCart shopcartDtls = new ShoppingCart();
+			ShoppingCartItems shopcartItmsDtls = new ShoppingCartItems();
+			shopcartDtls = shoppingcartRepo.findByProductId(productId);
+			if (shopcartDtls != null) {
+				shoppingcartRepo.delete(shopcartDtls);
+				
+				shopcartItmsDtls = shoppingcartItemsRepo.findByProductId(productId);
+				if (shopcartItmsDtls != null) {
+				
+					if(shopcartItmsDtls.getShoppingcartitemsId()==shopcartItemsID){
+				
+						shoppingcartItemsRepo.delete(shopcartItmsDtls);
+				
+						statusmsg.put("STATUS","SUCCESS");
+						statusmsg.put("MESSAGE","YOUR ORDER DELETED SUCCESSFULLY");
+					}					
+				}
+			}	
+		}catch(Exception e){
+			
+			statusmsg.put("STATUS","FAILURE");
+			statusmsg.put("MESSAGE",e.toString());
+			
+		}
 		return statusmsg;
 	}
-	/************************Method to Get Price of the Order*************************/	
-	
-	@RequestMapping(value = "getPrice/{orderID}", method = RequestMethod.GET, produces = "application/json")
-	@ApiOperation(value = "Get Order Price")
-	public float getOrderPrice(@PathVariable int orderID) {
-
-		float price = 0;
-		orderItems = orderItemsRepo.findByOrderId(orderID);
-
-		if (order != null) {
-			price = orderItems.getPrice();
-			return price;
-
-		}
-		LOGGER.info("GET PRICE VAULE--->" + price);
-		return price;
-	}
-
 }
