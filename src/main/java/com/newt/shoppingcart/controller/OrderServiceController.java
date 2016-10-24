@@ -1,31 +1,37 @@
 package com.newt.shoppingcart.controller;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
 
-import org.joda.time.DateTime;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.io.Resources;
 import com.newt.shoppingcart.commonutils.NotificationService;
 import com.newt.shoppingcart.commonutils.Productstatus;
-import com.newt.shoppingcart.model.Orders;
-import com.newt.shoppingcart.model.OrdersItems;
+import com.newt.shoppingcart.commonutils.ShoppingCartstatus;
 import com.newt.shoppingcart.model.ShoppingCart;
 import com.newt.shoppingcart.model.ShoppingCartItems;
-import com.newt.shoppingcart.repository.OrderItemsRepository;
-import com.newt.shoppingcart.repository.OrderRepository;
 import com.newt.shoppingcart.repository.ShoppingCartItemsRepository;
 import com.newt.shoppingcart.repository.ShoppingCartRepository;
 import com.wordnik.swagger.annotations.ApiOperation;
@@ -59,7 +65,7 @@ public class OrderServiceController {
 
 					shopcartDtlsnew.setCustomerId(customerId);
 					shopcartDtlsnew.setCreatedDate(new Date());
-					shopcartDtlsnew.setStatus("A");
+					shopcartDtlsnew.setStatus(ShoppingCartstatus.ACTIVE.toString());
 					shopcartDtlsnew.setProductId(productId);
 					shopcartDtlsnew=shoppingcartRepo.save(shopcartDtlsnew);
 					ShoppingCartItems shopcartItmsDtlsnew = new ShoppingCartItems();
@@ -70,7 +76,7 @@ public class OrderServiceController {
 					shopcartItmsDtlsnew.setPrice(price);
 					shopcartItmsDtlsnew.setProductDesc(productdesc);
 					shopcartItmsDtlsnew.setCustomerId(customerId);
-					shopcartItmsDtlsnew.setStatus("A");
+					shopcartItmsDtlsnew.setStatus(ShoppingCartstatus.ACTIVE.toString());
 					shopcartItmsDtlsnew=shoppingcartItemsRepo.save(shopcartItmsDtlsnew);
 			//		emailNotification.sendNotification("ORDER STATUS","Your Order#"+shopcartDtls.getShoppingCartId()+"has Created Successfully"+date.toString());
 		
@@ -80,7 +86,7 @@ public class OrderServiceController {
 					shopcartItmsDtlsList= shoppingcartItemsRepo.findByCustomerId(customerId);					
 					if (shopcartItmsDtlsList != null) {
 						for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
-							if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
+							if(shoppingCartItems.getStatus().equalsIgnoreCase(ShoppingCartstatus.ACTIVE.toString())){
 								shopcartItemsresult.add(shoppingCartItems);
 								totalcost=totalcost+shoppingCartItems.getPrice();
 								
@@ -136,32 +142,6 @@ public class OrderServiceController {
 		return null;
 	}
 
-	
-	/*@RequestMapping(value = "get/productList/{customerId}", method = RequestMethod.GET,produces = "application/json")
-	@ApiOperation(value = "Get ShoppingCart Details")
-	public Object[] orderCheckout(@PathVariable int customerId) {	
-		try {
-			List<ShoppingCartItems>shopcartItmsDtlsList;
-			ArrayList<ShoppingCartItems>shopcartItemsresult = new ArrayList<ShoppingCartItems>();
-			shopcartItmsDtlsList= shoppingcartItemsRepo.findByCustomerId(customerId);
-			
-			if (shopcartItmsDtlsList != null) {
-				for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
-					if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
-						shopcartItemsresult.add(shoppingCartItems);
-					}
-				}		
-				Object[] shopcartitems = shopcartItemsresult.toArray();
-				return shopcartitems;
-			}		
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}*/
-	
-/*Commented for testing purpose*/	
-	
 	@RequestMapping(value = "get/productList/{customerId}", method = RequestMethod.GET,produces = "application/json")
 	@ApiOperation(value = "Get ShoppingCart Details")
 	public List<ShoppingCartItems> orderCheckout(@PathVariable int customerId) {	
@@ -172,7 +152,7 @@ public class OrderServiceController {
 			
 			if (shopcartItmsDtlsList != null) {
 				for (ShoppingCartItems shoppingCartItems : shopcartItmsDtlsList) {
-					if(shoppingCartItems.getStatus().equalsIgnoreCase("A")){
+					if(shoppingCartItems.getStatus().equalsIgnoreCase(ShoppingCartstatus.ACTIVE.toString())){
 						shopcartItemsresult.add(shoppingCartItems);
 					}
 				}		
@@ -183,9 +163,6 @@ public class OrderServiceController {
 		}
 		return null;
 	}
-	
-	
-	
 	
 	@RequestMapping(value = "deleteOrder/{shopcartItemsID}/{customerId}/{productId}", method = RequestMethod.DELETE, produces = "application/json")
 	@ApiOperation(value = "Delete Order")
@@ -217,5 +194,5 @@ public class OrderServiceController {
 			
 		}
 		return statusmsg;
-	}
+	}	
 }
