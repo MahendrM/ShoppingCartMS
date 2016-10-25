@@ -53,8 +53,7 @@ public class KafkaController {
 	private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
 	//Method 1: This method is used to save the list of json values in a db using ObjectMapper.
-	
-//	@PostConstruct
+	@PostConstruct
 	public void consumeNumbersList() throws IOException  {
 		try{
         ObjectMapper mapper = new ObjectMapper();
