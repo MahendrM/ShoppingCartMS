@@ -22,7 +22,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class DataWithMicroservicesJpaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DataWithMicroservicesJpaApplication.class, args);
+		try {
+
+			ConfigurableApplicationContext context = SpringApplication.run(DataWithMicroservicesJpaApplication.class,
+					args);
+			context.getBean(KafkaController.class).consumeNumbersList();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
 	}
 
 	@Bean
