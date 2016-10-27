@@ -255,8 +255,9 @@
 	</createTable>
 </changeSet>
  -->
+	<!--
 <changeSet id="tag-1.0" author="karthy">
     <tagDatabase tag="1.0" />
   </changeSet>
-	
+	-->
  </databaseChangeLog>
