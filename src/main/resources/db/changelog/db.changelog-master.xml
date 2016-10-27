@@ -2,83 +2,261 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
 	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-	<!-- <changeSet author="karthy (generated)" id="1"
-		objectQuotingStrategy="QUOTE_ALL_OBJECTS">
 
-		<createTable tableName="SmartPhone">
-			<column autoIncrement="true" name="product_ID" type="INT">
+	<changeSet author="karthy (generated)" id="1"
+		objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+		
+		<createTable tableName="shoppingcart">
+			<column autoIncrement="true" name="shoppingcart_id" type="INT(11)">
 				<constraints primaryKey="true" />
 			</column>
-			<column name="productType_ID" type="VARCHAR(20)">
+			<column name="customer_id" type="INT(11)">
 				<constraints nullable="false" />
 			</column>
-			<column name="shortDescription" type="VARCHAR(200)">
+			<column name="product_id" type="INT(11)">
 				<constraints nullable="false" />
 			</column>
-			<column name="model" type="VARCHAR(50)">
-				<constraints nullable="false" />
+			<column name="created_date" type="datetime">
+				<constraints nullable="true" />
 			</column>
-			<column name="brand" type="VARCHAR(30)">
-				<constraints nullable="false" />
+			
+			<column name="status" type="VARCHAR(255)">
+				<constraints nullable="true" />
 			</column>
-
-			<column name="size" type="VARCHAR(30)">
-				<constraints nullable="false" />
-			</column>
-
-
-			<column name="displaySize" type="FLOAT">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="color" type="VARCHAR(30)">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="weight" type="FLOAT">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="carrierType" type="VARCHAR(10)">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="networkCapability" type="VARCHAR(10)">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="batteryPower" type="INTEGER">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="operatingSystem" type="VARCHAR(100)">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="processor" type="VARCHAR">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="internalMemory" type="FLOAT">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="ram" type="FLOAT">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="frontCamera" type="INTEGER">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="rearCamera" type="INTEGER">
-				<constraints nullable="false" />
-			</column>
-
-			<column name="price" type="FLOAT">
-				<constraints nullable="false" />
-			</column>
-
 		</createTable>
 	</changeSet>
- --></databaseChangeLog>
+		
+ 	<changeSet author="karthy (generated)" id="2" objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+		
+		<createTable tableName="shoppingcartitems">
+			<column autoIncrement="true" name="shoppingcartitems_id" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+			<column name="shoppingcart_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+			<column name="product_name" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="product_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="product_desc" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			<column name="price" type="float">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="customer_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+			
+			<column name="status" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+			
+		</createTable>
+	</changeSet>
+	
+	
+<!-- <changeSet author="karthy (generated)" id="3"
+	objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+	<createTable tableName="product">
+		<column autoIncrement="true" name="product_id" type="INT(11)">
+			<constraints primaryKey="true" />
+		</column>
+
+		<column name="product_description" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="product_name" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="price" type="float">
+			<constraints nullable="false" />
+		</column>
+
+	</createTable>
+</changeSet>
+ -->	
+<!-- <changeSet author="karthy (generated)" id="4"
+	objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+	<createTable tableName="customer">
+		<column autoIncrement="true" name="customer_id" type="INT(11)">
+			<constraints primaryKey="true" />
+		</column>
+
+		<column name="address_1" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="address_2" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+
+		<column name="age" type="INT(11)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="city" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="country" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="customer_email" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="customer_name" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="dob" type="datetime">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="first_name" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="gender" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="last_name" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="password" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="phone" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="pincode" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="state" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+
+		<column name="status" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+		<column name="username" type="VARCHAR(255)">
+			<constraints nullable="true" />
+		</column>
+		
+	</createTable>
+</changeSet>
+
+ -->
+	<!-- <changeSet author="karthy (generated)" id="5"
+		objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+		<createTable tableName="checkout">
+			<column autoIncrement="true" name="order_id" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+
+			<column name="address_1" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="address_2" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="card_exp_date" type="datetime">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="city" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="country" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="credit_card_no" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="customer_email" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="customer_id" type="BIGINT(20)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="customer_name" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="pincode" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="state" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+		
+	</createTable>
+</changeSet>
+
+ -->
+	<!-- <changeSet author="karthy (generated)" id="6"
+		objectQuotingStrategy="QUOTE_ALL_OBJECTS">
+
+		<createTable tableName="product_checkout">
+			<column autoIncrement="true" name="productcheckout_id" type="INT(11)">
+				<constraints primaryKey="true" />
+			</column>
+
+			<column name="checkout_order_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="customer_id" type="BIGINT(20)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="product_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+
+			<column name="product_name" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="product_status" type="VARCHAR(255)">
+				<constraints nullable="true" />
+			</column>
+
+			<column name="shoppingcart_id" type="INT(11)">
+				<constraints nullable="false" />
+			</column>
+
+	</createTable>
+</changeSet>
+ -->
+<changeSet id="tag-1.0" author="karthy">
+    <tagDatabase tag="1.0" />
+  </changeSet>
+	
+ </databaseChangeLog>
