@@ -26,10 +26,10 @@ public class DataWithMicroservicesJpaApplication {
 
 	public static void main(String[] args) {
 		try {
-
-			ConfigurableApplicationContext context = SpringApplication.run(DataWithMicroservicesJpaApplication.class,
+                        SpringApplication.run(DataWithMicroservicesJpaApplication.class,args);
+			/*ConfigurableApplicationContext context = SpringApplication.run(DataWithMicroservicesJpaApplication.class,
 					args);
-			context.getBean(KafkaController.class).consumeNumbersList();
+			context.getBean(KafkaController.class).consumeNumbersList();*/
 
 		} catch (Exception e) {
 
