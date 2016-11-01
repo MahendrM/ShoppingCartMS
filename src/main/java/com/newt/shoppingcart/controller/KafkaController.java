@@ -42,7 +42,9 @@ import com.newt.shoppingcart.repository.ShoppingCartItemsRepository;
 import com.newt.shoppingcart.repository.ShoppingCartRepository;
 import com.wordnik.swagger.annotations.ApiOperation;
 
-@Component
+//@Component
+@RestController
+@RequestMapping(value = "/consumes")
 public class KafkaController {
 	
 	@Autowired
@@ -54,6 +56,7 @@ public class KafkaController {
 
 	//Method 1: This method is used to save the list of json values in a db using ObjectMapper.
 	//@PostConstruct
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public void consumeNumbersList() throws IOException  {
 		try{
         ObjectMapper mapper = new ObjectMapper();
@@ -89,7 +92,7 @@ public class KafkaController {
 	}
 	
 //Obtain Kafka Method 2:
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/kafkaaccess", method = RequestMethod.GET)
 	public void consumeNumbers() throws IOException  {
 		try{
 			
