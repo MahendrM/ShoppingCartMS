@@ -1,5 +1,6 @@
 package com.newt.shoppingcart.model;
 
+
 import java.util.Date;
 
 import javax.persistence.Entity;
