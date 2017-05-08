@@ -13,6 +13,7 @@ public class NotificationService {
 
 	@Autowired
 	public NotificationService(JavaMailSender javaMailSender) {
+		
 		this.javaMailSender = javaMailSender;
 	}
 	
